@@ -1,0 +1,36 @@
+
+// Run This In Chrome Console
+var youtubeLinks = [];
+
+// Define a function to extract YouTube video links from the YouTube homepage.
+function extractYouTubeVideoLinks() {
+  // Select all 'a' elements on the page.
+  var urls = document.querySelectorAll('a');
+
+  // Loop through the selected elements and check if they belong to a video link.
+  urls.forEach(function (v, i, a) {
+    // Check if the href attribute contains "/watch?v=" to identify video links.
+    if (v.href.includes("/watch?v=")) {
+      // Add the YouTube video link to the array.
+      youtubeLinks.push(v.href);
+    }
+  });
+
+  // Join the array into a newline-separated string.
+  var youtubeLinksText = youtubeLinks.join('\n');
+
+  // Create a Blob containing the text and save it as a text file.
+  var blob = new Blob([youtubeLinksText], { type: 'text/plain' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'youtube_links.txt';
+  a.style.display = 'none';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+// Call the extractYouTubeVideoLinks function after a short delay to ensure the page is loaded.
+setTimeout(extractYouTubeVideoLinks, 3000); // Adjust the delay as needed.
